@@ -1,0 +1,10 @@
+{
+  "commitMessage": "sync: mac {{date}}",
+  "commitDateFormat": "YYYY-MM-DD HH:mm:ss",
+  "autoSaveInterval": 10,
+  "autoPullInterval": 10,
+  "autoPullOnBoot": true,
+  "pullBeforePush": true,
+  "disablePush": false,
+  "syncMethod": "rebase"
+}
