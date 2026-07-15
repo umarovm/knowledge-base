@@ -120,7 +120,7 @@ projects/wikibot/BACKLOG.md.
 
 ## Словарь тегов
 
-`promotion, team-lead, salary, revolut` (work) · `cv, interview` (job-search) ·
+`promotion, team-lead, salary, revolut` (work) · `cv, interview, remote, applications` (job-search) ·
 `investing, crypto, portfolio, deposit, strategy, dca, ibkr, x-stocks` (finance) ·
 `bot, wikibot, deploy` (projects) · `uzbekistan` (сквозной).
 Новый тег — добавь сюда же.
