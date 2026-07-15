@@ -1,3 +1,9 @@
+---
+type: living
+project: job-search
+summary: "Тренажёр по разбору OM-интервью: диагноз, дриллы A–E, банк mock-кейсов, рубрика, лог тренировок."
+---
+
 # INTERVIEW_DRILLS — тренажёр по разбору OM-интервью (Revolut, ~1 июля 2026)
 
 Источник: ops_manager_interview_transcript.md. Кейс интервьюера (João, роль — Global Head of HR): сократить time-to-hire с 44 до 29 дней и удвоить conversion rate найма backend-разработчиков с 0.33% до 0.66%.
