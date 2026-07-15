@@ -1,8 +1,11 @@
 ---
-created: "2026-07-14T22:19:19.801006+00:00"
-capture_id: "tg-135983407-7"
+date: 2026-07-14
 source: "[[captures/2026-07-14-221919--tg-135983407-7]]"
-destination: inbox
+capture_id: "tg-135983407-7"
+project: projects/wikibot
+tags: [wikibot, deploy]
+status: processed
+summary: "LLMWikiBot завершён и развернут на сервере, финальная тестовая запись"
 ---
 
 # LLMWikiBot завершен и развернут

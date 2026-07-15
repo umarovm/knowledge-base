@@ -1,8 +1,13 @@
 ---
-created: "2026-07-15T08:25:21.338623+00:00"
-capture_id: "tg-135983407-11"
+date: 2026-07-15
 source: "[[captures/2026-07-15-082521--tg-135983407-11]]"
-destination: inbox
+capture_id: "tg-135983407-11"
+project: finance
+tags: [investing, revolut, ibkr, x-stocks]
+status: processed
+related:
+  - "[[ideas/2026-07-15-бот-для-покупки-крипты-и-акций-в-uz]]"
+summary: "$100/мес в акции через Revolut, затем перенос в IBKR (long-term); после переезда в UZ — покупки через x-stocks"
 ---
 
 # План инвестирования через Revolut и Interactive Brokers
