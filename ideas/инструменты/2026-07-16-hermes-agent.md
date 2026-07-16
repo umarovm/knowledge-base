@@ -2,7 +2,7 @@
 date: 2026-07-16
 project: ideas/инструменты
 tags: [инструменты]
-status: processed
+status: archived
 summary: "Гайд по настройке Hermes agent на VPS — не готов платить за токены, пока нет реальной задачи, которую он решает."
 ---
 

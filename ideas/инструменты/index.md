@@ -7,9 +7,9 @@
 | 2026-07-16-anthropic-prompt-library.md | 2026-07-16 | Библиотека промптов Anthropic — проверить и сохранить полезные. | processed | инструменты |
 | 2026-07-16-omnirouter-llm-api.md | 2026-07-16 | OmniRoute и похожие репозитории объединяют API-ключи разных провайдеров под free limits —… | processed | инструменты |
 | 2026-07-16-youtube-to-markdown.md | 2026-07-16 | Репозиторий для конвертации YouTube-видео в markdown для разбора с LLM — сравнить с Noteb… | processed | инструменты |
-| 2026-07-16-hermes-agent.md | 2026-07-16 | Гайд по настройке Hermes agent на VPS — не готов платить за токены, пока нет реальной зад… | processed | инструменты |
+| 2026-07-16-hermes-agent.md | 2026-07-16 | Гайд по настройке Hermes agent на VPS — не готов платить за токены, пока нет реальной зад… | archived | инструменты |
 | 2026-07-16-claude-skills-repo.md | 2026-07-16 | Репозиторий готовых skills/agents для Claude Code — оценить, реально ли повышает качество… | processed | инструменты |
-| 2026-07-16-opencut-video-editor.md | 2026-07-16 | OpenCut — open source аналог CapCut, полезно если займусь созданием контента. | processed | инструменты |
+| 2026-07-16-opencut-video-editor.md | 2026-07-16 | OpenCut — open source аналог CapCut, полезно если займусь созданием контента. | archived | инструменты |
 
 ## Связи
 
