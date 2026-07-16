@@ -30,6 +30,7 @@ Hermes НЕ получает доступ к knowledge-base. KB — second brain
 - **Скан вакансий** под критерии раннего remote-теста (см. job-search/) — ежедневный дайджест новых постов в Telegram.
 - **Трекинг фриланс-воронки** (20→10→5→3→1 до 1 октября) и **UZ-networking контактов** — ведётся в собственной памяти Hermes, не в KB.
 - Анализ моих расходов (pull from WalletApp -> Analyze -> Send report). Затем я готовый репорт добавляю в KB. 
+- Business ideas research (online SaaS and online/offline product for Uzbekistan market)
 
 ## Следующий шаг
 
