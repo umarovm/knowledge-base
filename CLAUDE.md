@@ -122,7 +122,8 @@ projects/wikibot/BACKLOG.md.
 
 `promotion, team-lead, salary, revolut` (work) · `cv, interview, remote, applications` (job-search) ·
 `investing, crypto, portfolio, deposit, strategy, dca, ibkr, x-stocks` (finance) ·
-`bot, wikibot, deploy` (projects) · `uzbekistan` (сквозной).
+`bot, wikibot, deploy` (projects) · `экономика, конспект, курсы` (learning) ·
+`инструменты, продуктивность` (ideas) · `uzbekistan` (сквозной).
 Новый тег — добавь сюда же.
 
 ## Структура и тематические подпапки
