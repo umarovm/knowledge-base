@@ -2,7 +2,7 @@
 
 | Файл | Дата | Summary | Статус | Теги |
 |---|---|---|---|---|
-| SETUP.md | — | Living-файл проекта Hermes: полная инструкция установки (VPS → OmniRoute → Hermes → задач… | living | bot, deploy, инструменты |
+| SETUP.md | — | Living-файл проекта Hermes: детальная инструкция для первого раза (Mac → Hetzner VPS → He… | living | bot, deploy, инструменты |
 | 2026-07-16-omnirouter-llm-api.md | 2026-07-16 | OmniRoute — verified: self-hosted AI-gateway (16k★, MIT), Subscription→API→Cheap→Free fal… | processed | bot, инструменты |
 | 2026-07-16-hermes-agent.md | 2026-07-16 | Hermes agent на VPS через OmniRoute (verified): руки для внешних задач (скан вакансий, та… | processed | bot, инструменты |
 

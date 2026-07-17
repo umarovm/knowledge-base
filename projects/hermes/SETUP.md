@@ -6,191 +6,316 @@ status: processed
 related:
   - "[[projects/hermes/2026-07-16-hermes-agent]]"
   - "[[projects/hermes/2026-07-16-omnirouter-llm-api]]"
-summary: "Living-файл проекта Hermes: полная инструкция установки (VPS → OmniRoute → Hermes → задачи по фазам) + текущий статус. Шапка = состояние, лог внизу."
+summary: "Living-файл проекта Hermes: детальная инструкция для первого раза (Mac → Hetzner VPS → Hermes → Telegram; OmniRoute — этапом Б) + текущий статус. Шапка = состояние, лог внизу."
 ---
 
 # Hermes Agent — SETUP (шапка = текущее состояние)
 
-**Статус:** фаза 0 — ничего не развёрнуто. Следующее действие: арендовать VPS (шаг 1).
+**Статус:** фаза 0 — ничего не развёрнуто. Следующее действие: SSH-ключ на Mac + аренда VPS (шаги 1–2).
 
 | Фаза | Что | Статус |
 |---|---|---|
-| 1 | VPS арендован и захарднен | ☐ |
-| 2 | OmniRoute поднят, провайдеры подключены, fallback работает | ☐ |
-| 3 | Hermes установлен, Telegram-гейтвей, systemd | ☐ |
+| 1 | SSH-ключ на Mac, VPS арендован, харднинг сделан | ☐ |
+| 2 | Hermes установлен, DeepSeek напрямую, первый чат в CLI работает | ☐ |
+| 3 | Telegram-гейтвей + allowlist + systemd (работает 24/7) | ☐ |
 | 4 | Задача 1: скан вакансий (2 недели обкатки) | ☐ |
-| 5 | Задача 2: отчёт о расходах | ☐ |
-| 6 | Задача 3: фриланс-воронка + UZ-networking | ☐ |
+| 5 | OmniRoute поверх (fallback + free-тиры) — только когда всё стабильно | ☐ |
+| 6 | Задача 2: отчёт о расходах | ☐ |
+| 7 | Задача 3: фриланс-воронка + UZ-networking | ☐ |
 
 **Ключевые решения:**
-- Новый отдельный VPS — на текущем крутятся боты с секретами (приватные ключи кошельков), Hermes к ним не подпускаем.
-- Подписка Claude Pro в Hermes НЕ используется — лимиты нужны для Cowork/Claude Code. Стек: DeepSeek API (основной мозг) + Gemini/OpenRouter free (вспомогательные задачи).
-- Hermes не имеет доступа к knowledge-base (решение 16.07, см. заметку).
-- Задачи внедряются по одной; business ideas research вычеркнут (решение 17.07).
+- Новый отдельный VPS — на текущем боты с секретами (ключи кошельков), Hermes к ним не подпускаем.
+- Claude Pro в Hermes НЕ используется. Основной мозг — DeepSeek V4 **через OpenRouter** (один аккаунт на все модели; OpenRouter — нативный провайдер Hermes). Обязательно зафиксировать провайдера DeepSeek в настройках OpenRouter (см. 4.1), иначе лотерея квантизаций ломает tool-calling.
+- OmniRoute — НЕ на старте, а этапом Б. Правило из доков Hermes: «не добавляй routing/fallback, пока базовый чат не работает стабильно».
+- Hermes не имеет доступа к knowledge-base (16.07). Business ideas research вычеркнут (17.07). Задачи — по одной.
 
 ---
 
-## Архитектура
+## 0. Как ты будешь со всем этим работать (главное, прочитай первым)
 
-```
-Telegram (только мой user ID)
-        │
-   Hermes agent (VPS, systemd, docker-backend)
-        │  config.yaml: provider: custom → base_url
-        ▼
-   OmniRoute (localhost:20128/v1, self-hosted gateway)
-        │  fallback: API → Cheap → Free
-        ▼
-   DeepSeek API ──► Gemini API (free tier) ──► OpenRouter (:free модели)
-```
+VPS — это просто удалённый Linux-компьютер без экрана. Ты подключаешься к нему из **Terminal.app на Mac по SSH** — но только для установки и обслуживания. Повседневное общение с Hermes идёт **через Telegram с телефона/Mac**, как с обычным ботом. Терминал после настройки будешь открывать раз в пару недель.
 
-Память Hermes (MEMORY.md / USER.md) живёт на VPS, в KB не пишет.
-В KB попадают только готовые артефакты (репорты), и только через меня вручную.
+Три интерфейса, каждый для своего:
 
----
-
-## Шаг 1. VPS (~€4–6/мес)
-
-Требования Hermes: 2 GB RAM, ~1 GB диска. С запасом под OmniRoute + Docker-песочницу бери **4 GB RAM**.
-
-**Рекомендация: Hetzner Cloud CX22** (2 vCPU / 4 GB / 40 GB NVMe, ~€4/мес с VAT), локация Falkenstein или Nuremberg — до Варшавы ~20 мс. Альтернативы: Netcup (дешевле, менее удобная панель), Contabo (больше ресурсов за те же деньги, но овербукинг). ОС: **Ubuntu 24.04 LTS**.
-
-Базовый харднинг сразу после создания:
-
-```bash
-adduser hermes && usermod -aG sudo hermes        # не работать под root
-# ssh-ключ вместо пароля; в /etc/ssh/sshd_config:
-#   PasswordAuthentication no, PermitRootLogin no
-sudo apt update && sudo apt install -y git curl xz-utils ufw fail2ban unattended-upgrades
-sudo ufw allow OpenSSH && sudo ufw enable         # наружу порты не открываем:
-                                                  # OmniRoute слушает только localhost,
-                                                  # Telegram — исходящие соединения
-sudo dpkg-reconfigure -plow unattended-upgrades
-# Docker для песочницы Hermes:
-curl -fsSL https://get.docker.com | sudo sh && sudo usermod -aG docker hermes
-```
-
-## Шаг 2. OmniRoute
-
-Репозиторий: https://github.com/diegosouzapw/OmniRoute (MIT, 16k+★). Ставим в Docker:
-
-```bash
-docker run -d --name omniroute --restart unless-stopped \
-  -p 127.0.0.1:20128:20128 -v ~/omniroute-data:/data \
-  ghcr.io/diegosouzapw/omniroute:latest
-```
-
-(точный image/команду сверить с README — есть также npm-вариант `npx omniroute`).
-Дашборд: `http://localhost:20128/dashboard` (с ноутбука — через ssh-туннель:
-`ssh -L 20128:localhost:20128 hermes@vps`). Настройка провайдеров — в дашборде, YAML не нужен.
-
-**Подключить провайдеры (мои аккаунты):**
-
-| Уровень | Провайдер | Роль |
+| Что | Как открыть | Когда используешь |
 |---|---|---|
-| API | DeepSeek API (platform.deepseek.com) | основной мозг: V4 / V4 Flash |
-| Cheap | Gemini API — платный ключ не обязателен | gemini-flash на vision/web_extract |
-| Free | Gemini free tier, OpenRouter `:free` модели | вспомогательные задачи, эксперименты |
+| Терминал VPS | `ssh hermes@IP` из Terminal.app | Установка, обновления, логи. Редко |
+| Hermes CLI/TUI | внутри SSH: команда `hermes --tui` | Настройка и отладка агента. Первая неделя |
+| **Telegram-бот** | обычный чат в Telegram | **Вся повседневная работа. Основной способ** |
+| Дашборд OmniRoute (этап Б) | браузер на Mac через SSH-туннель (ниже) | Настройка провайдеров, статистика расходов |
 
-Fallback-цепочка OmniRoute: **API → Cheap → Free** (subscription-уровень пропускаем — Claude Pro не подключаем; если когда-нибудь появится ChatGPT Plus + Codex CLI, его можно добавить верхним уровнем через OAuth).
+Веб-интерфейсы на VPS (дашборд OmniRoute) наружу в интернет не открываем — вместо этого **SSH-туннель**: команда на Mac пробрасывает порт VPS на твой localhost, и ты открываешь его в Safari/Chrome как будто он локальный. Пример ниже в шаге про OmniRoute.
 
-**Почему free-модели НЕ основной мозг, а только fallback:** free-провайдеры на OpenRouter нестабильны в tool-calling (разные квантизации, роутинг между ~20 инстансами одной модели) — для агентного цикла это ломающий фактор. Цены DeepSeek (июль 2026): V4 Flash $0.09/$0.18 за 1M токенов, V4 Pro $0.435/$0.87 — при таких ценах «экономить» free-моделями на основном цикле бессмысленно. Free — для дешёвых вспомогательных задач и как аварийный нижний уровень.
+## 1. Подготовка на Mac: SSH-ключ (5 минут)
 
-## Шаг 3. Hermes
-
-Доки: https://hermes-agent.nousresearch.com/docs/ · Репо: https://github.com/NousResearch/hermes-agent
+SSH-ключ = пара файлов: приватный (остаётся на Mac, никому не показывать) + публичный (кладётся на сервер). Вход по ключу вместо пароля — стандарт.
 
 ```bash
-# под пользователем hermes; браузерная автоматизация пока не нужна → --skip-browser
+# В Terminal.app на Mac. Если ключ уже есть (ls ~/.ssh/*.pub что-то показывает) — пропусти.
+ssh-keygen -t ed25519 -C "mvoramu@gmail.com"
+# Enter на все вопросы (путь по умолчанию, passphrase можно пустую)
+
+cat ~/.ssh/id_ed25519.pub   # ← это публичный ключ, скопируй вывод целиком
+```
+
+## 2. Аренда VPS: Hetzner Cloud (~15 минут)
+
+Требования Hermes: 2 GB RAM / ~1 GB диска. Берём 4 GB — с запасом под Docker-песочницу и OmniRoute.
+
+1. Регистрация: https://console.hetzner.com (потребуют карту или PayPal, спишут €0 для верификации).
+2. **New Project** → назови `hermes`.
+3. **Add Server**:
+   - Location: **Falkenstein** или **Nuremberg** (до Варшавы ~20 мс);
+   - Image: **Ubuntu 24.04**;
+   - Type: **Shared vCPU → CX22** (2 vCPU / 4 GB / 40 GB, ~€4/мес);
+   - SSH keys → **Add SSH key** → вставь публичный ключ из шага 1;
+   - Остальное по умолчанию → **Create & Buy now**.
+4. Через ~30 секунд сервер готов, скопируй его **IP-адрес** из консоли.
+
+Проверка входа с Mac: `ssh root@IP` → на вопрос про fingerprint ответь `yes` → ты внутри (приглашение `root@...`). Выход — `exit`.
+
+## 3. Харднинг сервера (~20 минут, один раз)
+
+Всё выполняется в SSH-сессии под root. Копируй блоками.
+
+```bash
+# 3.1 Обновить систему
+apt update && apt upgrade -y
+
+# 3.2 Создать рабочего пользователя (под root не работаем)
+adduser hermes            # придумай пароль, остальные вопросы — Enter
+usermod -aG sudo hermes
+mkdir -p /home/hermes/.ssh
+cp ~/.ssh/authorized_keys /home/hermes/.ssh/   # твой ключ теперь работает и для hermes
+chown -R hermes:hermes /home/hermes/.ssh && chmod 700 /home/hermes/.ssh
+
+# 3.3 Запретить вход по паролю и под root
+sed -i 's/^#\?PasswordAuthentication.*/PasswordAuthentication no/' /etc/ssh/sshd_config
+sed -i 's/^#\?PermitRootLogin.*/PermitRootLogin no/' /etc/ssh/sshd_config
+systemctl restart ssh
+
+# 3.4 Файрвол: наружу только SSH
+apt install -y ufw fail2ban unattended-upgrades
+ufw allow OpenSSH && ufw --force enable
+dpkg-reconfigure -plow unattended-upgrades   # выбери Yes (автообновления безопасности)
+
+# 3.5 Docker (песочница для команд Hermes)
+curl -fsSL https://get.docker.com | sh
+usermod -aG docker hermes
+
+# 3.6 Зависимости для установщика Hermes
+apt install -y git curl xz-utils
+```
+
+⚠️ **Прежде чем закрыть root-сессию**, проверь в новой вкладке Terminal, что `ssh hermes@IP` работает. Дальше всегда входи как `hermes@IP`.
+
+## 4. Установка Hermes — этап А, без OmniRoute (~30 минут)
+
+Философия из официального квикстарта: сначала один чистый работающий чат, только потом гейтвеи, cron и роутинг.
+
+### 4.1 Ключ OpenRouter + фикс провайдера
+
+https://openrouter.ai → **Keys** → создать ключ (`sk-or-...`) → пополнить баланс на $10 (заодно поднимает лимиты на `:free`-модели). Цены DeepSeek через OpenRouter: V4 Flash $0.09/$0.18, V4 Pro $0.435/$0.87 за 1M токенов (+~5% комиссия на пополнение).
+
+⚠️ **Критично для агента:** по умолчанию OpenRouter раскидывает запросы к DeepSeek между десятками хостеров в разных квантизациях — у части из них нестабилен tool-calling, а на этом агентный цикл ломается. Поэтому в аккаунте OpenRouter: **Settings → провайдерские настройки** — ограничь DeepSeek-модели официальным провайдером DeepSeek (или внеси ненадёжных в Ignored Providers). Один раз, спасает недели странных глюков.
+
+### 4.2 Установка
+
+```bash
+# на VPS под пользователем hermes
 curl -fsSL https://hermes-agent.nousresearch.com/install.sh | bash -s -- --skip-browser
 source ~/.bashrc
-hermes setup        # мастер: модель, терминал-бэкенд, гейтвей, инструменты
-hermes doctor       # проверка
+hermes doctor    # всё зелёное = ок
 ```
 
-Ключевые настройки (`~/.hermes/config.yaml`):
+`--skip-browser` — пропускаем браузерную автоматизацию (не нужна для наших задач, экономит место; включить можно потом).
+
+### 4.3 Мастер настройки
+
+```bash
+hermes setup
+```
+
+Это интерактивный TUI-мастер (стрелки + Enter). Проходим так:
+
+- Режим: **Full Setup** (не Nous Portal — это их платная подписка, не Blank Slate).
+- Провайдер: **OpenRouter** → вставь ключ `sk-or-...`. Модель: `deepseek/deepseek-v4` (слаг сверь на openrouter.ai/deepseek; контекст ≥64K — V4 проходит).
+- Terminal backend: **Docker** (изоляция: команды агента выполняются в контейнере, не на хосте).
+- Messaging gateway: пока **пропусти** — подключим после проверки чата.
+- Инструменты (web search и т.д.): включи **web search**, остальное по вкусу; всё меняется позже через `hermes tools`.
+
+Секреты лягут в `~/.hermes/.env`, настройки — в `~/.hermes/config.yaml`.
+
+### 4.4 Первый чат — проверка
+
+```bash
+hermes --tui
+```
+
+Проверь последовательно: (1) баннер показывает твою модель; (2) обычный вопрос — отвечает; (3) «What's my disk usage? Show top 5 directories» — агент запускает команду и показывает результат; (4) выйди и `hermes -c` — сессия возобновляется. Если что-то сломалось: `hermes doctor` → `hermes model` → снова чат. Пока это не работает — дальше не идти.
+
+### 4.5 Дешёвая маршрутизация вспомогательных задач
+
+Фоновые подзадачи (сжатие контекста, названия сессий) переводим на V4 Flash — он в ~5 раз дешевле. В `~/.hermes/config.yaml` (редактор: `nano ~/.hermes/config.yaml`, сохранить Ctrl+O, выйти Ctrl+X):
 
 ```yaml
 model:
-  provider: "custom"
-  base_url: "http://localhost:20128/v1"   # OmniRoute
-  default: "deepseek-v4"                  # основной диалог + curator
+  provider: "openrouter"
+  default: "deepseek/deepseek-v4"          # диалог, curator, goal_judge — качество
   auxiliary:
-    compression:      { model: "deepseek-v4-flash" }   # сжатие контекста
-    title_generation: { model: ":free" }                # мусорная задача → free
-    web_extract:      { model: "deepseek-v4-flash" }
-    vision:           { model: "gemini-flash" }
-    curator:          { model: "deepseek-v4" }          # НЕ экономить: курирует навыки
-    kanban_decomposer: { model: "deepseek-v4-flash" }
-    goal_judge:       { model: "deepseek-v4" }
+    compression:      { model: "deepseek/deepseek-v4-flash" }
+    title_generation: { model: "deepseek/deepseek-v4-flash" }
+    web_extract:      { model: "deepseek/deepseek-v4-flash" }
+    kanban_decomposer: { model: "deepseek/deepseek-v4-flash" }
+    # curator НЕ удешевляем: он курирует библиотеку навыков, ошибки дорогие
 ```
 
-Дальше:
-- `hermes config set terminal.backend docker` — команды выполняются в песочнице, не на хосте.
-- `hermes gateway setup` → Telegram (самый отполированный гейтвей, токен не нужен — даёт готовую ссылку на бота). Обязательно: **allowlist только моего user ID** в config.yaml.
-- systemd-юнит, чтобы жил 24/7:
+Точные имена моделей сверь со списком в `hermes model`.
+
+## 5. Telegram + 24/7 (этап А, финал)
+
+### 5.1 Гейтвей
+
+```bash
+hermes gateway setup
+```
+
+Выбери **Telegram** — даст ссылку на предконфигурированного бота, свой токен не нужен. Открой ссылку, нажми Start.
+
+**Обязательно** ограничь доступ своим Telegram user ID (узнать: напиши боту @userinfobot). В `config.yaml` найди секцию telegram → `allowed_user_ids` (точное имя поля покажет `hermes config get`); проверь статус: `hermes gateway status`.
+
+### 5.2 systemd — чтобы Hermes жил после закрытия терминала
+
+Без этого Hermes умирает вместе с SSH-сессией. Создаём сервис:
+
+```bash
+sudo nano /etc/systemd/system/hermes.service
+```
 
 ```ini
-# /etc/systemd/system/hermes.service
 [Unit]
-Description=Hermes Agent
+Description=Hermes Agent Gateway
 After=network-online.target docker.service
+Wants=network-online.target
+
 [Service]
 User=hermes
-ExecStart=/home/hermes/.local/bin/hermes gateway run
+WorkingDirectory=/home/hermes
+ExecStart=/home/hermes/.local/bin/hermes gateway
 Restart=always
 RestartSec=10
+
 [Install]
 WantedBy=multi-user.target
 ```
 
-`sudo systemctl enable --now hermes` (имя команды запуска гейтвея сверить с `hermes --help`).
+(если `hermes gateway` не команда запуска — сверь с `hermes gateway --help`, возможно `hermes gateway run`)
 
-## Шаг 4. Задачи — по фазам, по одной за раз
+```bash
+sudo systemctl daemon-reload
+sudo systemctl enable --now hermes
+systemctl status hermes          # active (running) = готово
+journalctl -u hermes -f          # живые логи (Ctrl+C — выход)
+```
 
-**Фаза 1 (сразу): скан вакансий.** Cron-задача: скрипт собирает новые посты из источников (tg-каналы/борды по критериям из job-search/), LLM-фильтр по моим критериям раннего remote-теста, дайджест в Telegram раз в день. Сбор — чистый скрипт; LLM (V4 Flash) только на фильтрацию уже собранного. Обкатка 2 недели: считаю precision дайджеста (сколько постов реально релевантны).
+**С этого момента терминал больше не нужен для общения** — пишешь боту в Telegram. Полезные команды в чате: `/help`, `/background <задача>`, `/goal`, `/model`.
 
-**Фаза 2: расходы.** WalletApp → выгрузка → анализ → еженедельный репорт в Telegram. Готовый репорт руками кладу в `finance/`.
+### 5.3 Шпаргалка обслуживания (SSH, раз в 1–2 недели)
 
-**Фаза 3: фриланс-воронка (20→10→5→3→1 до 1.10) + UZ-networking.** Живёт в памяти Hermes; еженедельный дайджест переношу в `job-search/APPLICATIONS.md`. Один хозяин данных — Hermes, KB хранит только снапшоты.
+```bash
+ssh hermes@IP
+hermes update                 # обновить Hermes
+sudo apt update && sudo apt upgrade -y
+systemctl restart hermes      # после обновлений
+journalctl -u hermes --since today   # что происходило
+df -h / && free -h            # диск и память
+```
 
-**Без LLM вообще (cron `-no-agent`, ноль токенов), когда-нибудь потом:** крипто-алерты по уровням цен, healthcheck моих ботов на другом VPS (curl + пуш при падении).
+## 6. Задача 1: скан вакансий (фаза 4)
 
-**Вычеркнуто:** business ideas research (см. заметку hermes-agent).
+Через Telegram, без терминала. Скажи боту создать cron-задачу: источники (tg-каналы/борды из job-search/), критерии раннего remote-теста, время дайджеста. Устройство: сбор постов — скрипт, LLM (V4 Flash) — только фильтрация собранного, дайджест — одно сообщение в день.
 
-## Шаг 5. Skills — как оформлять задачи
+Правильный workflow создания (из гайда): надиктуй голосом, как ты сам ищешь и отсеиваешь вакансии (LLMWikiBot идеален) → отдай текст Hermes'у как основу скилла → добавь evals: 10 реальных постов с твоей разметкой релевантно/нет → гоняй тестово, правь руками → только потом в ежедневный cron. Две недели считай precision; следующая задача — после стабильности.
 
-Workflow из гайда (проверен практикой, не выдумка):
+## 7. OmniRoute — этап Б (фаза 5, не раньше)
 
-1. Записать голосом, как я сам делаю процесс от и до (через LLMWikiBot — идеально).
-2. Отдать запись coding-агенту → черновик скилла.
-3. Встроить evals — эталонные примеры правильного результата (для скана вакансий: 10 постов с ручной разметкой релевантно/нет).
-4. Гонять в тесте, править скилл и evals руками.
-5. Только стабильный скилл отдавать в 24/7.
+Зачем: free-тиры (Gemini, OpenRouter `:free` — суммарно ~1.6B бесплатных токенов/мес по всем провайдерам), auto-fallback при недоступности DeepSeek, дашборд расходов, сжатие токенов (RTK+Caveman, 15–95%).
 
-Полезные встроенные команды: `/background` (фоновая задача), `/goal` (долгосрочная цель с проверкой goal_judge), `/kanban` (мультиагентная доска), cron + вебхуки. Самообучающийся цикл (memory/skill-триггеры + curator) включён по умолчанию — куратору оставить deepseek-v4.
+```bash
+# на VPS (Node.js уже стоит после установщика Hermes)
+npm install -g omniroute
+mkdir -p ~/.omniroute
+nano ~/.omniroute/.env
+```
 
-## Бюджет
+```env
+JWT_SECRET=длинная-случайная-строка      # сгенерируй: openssl rand -hex 32
+INITIAL_PASSWORD=пароль-для-дашборда
+PORT=20128
+```
 
-| Статья | €/мес |
+Запуск — команда `omniroute` (слушает только localhost). systemd-юнит по аналогии с hermes.service (`ExecStart=/usr/bin/env omniroute`, User=hermes).
+
+**Дашборд с Mac через SSH-туннель:**
+
+```bash
+# на Mac; держи окно открытым, пока работаешь с дашбордом
+ssh -L 20128:localhost:20128 hermes@IP
+# теперь в браузере на Mac: http://localhost:20128/dashboard
+```
+
+В дашборде: добавь провайдеров (OpenRouter-ключ, Gemini API-ключ с ai.google.dev) → собери **combo** со стратегией `priority`: DeepSeek V4 (через OpenRouter) → Gemini Flash → `:free` модели (или используй готовый `auto/cheap`). Затем переключи Hermes:
+
+```yaml
+# ~/.hermes/config.yaml
+model:
+  provider: "custom"
+  base_url: "http://localhost:20128/v1"
+  api_key: "ключ-созданный-в-дашборде-omniroute"
+  default: "auto/cheap"      # или имя твоего combo
+```
+
+`systemctl restart hermes` и проверь чат. Если что-то глючит — верни `provider: "openrouter"`, это твой стабильный откат.
+
+⚠️ Free-модели — только нижний уровень fallback и вспомогательные задачи, НЕ основной мозг: на OpenRouter одна модель раздаётся ~20 провайдерами в разных квантизациях, tool-calling у них нестабилен, а агентный цикл на этом ломается.
+
+## 8. Бюджет
+
+| Статья | /мес |
 |---|---|
-| VPS Hetzner CX22 | ~4 |
-| Токены: фазы 1–3 на V4/V4 Flash (aux на free) | ~1–2 |
-| **Итого** | **~5–6** |
+| VPS Hetzner CX22 | ~€4 |
+| OpenRouter: DeepSeek V4/Flash (задачи 1–3, aux на Flash) | ~$0.5–2 |
+| **Итого** | **~€5–6** |
 
-Оценка токенов: дайджест вакансий ~50–100k токенов/день на Flash ≈ $0.3–0.6/мес; недельные репорты — копейки. Порог тревоги: если счёт DeepSeek > $5/мес — смотреть, какая задача жрёт (дашборд OmniRoute показывает разбивку).
+Порог тревоги: расход >$5/мес → смотреть Activity на openrouter.ai (или дашборд OmniRoute), какая задача жрёт.
 
-## Безопасность (чеклист)
+## 9. Безопасность (чеклист)
 
-- [ ] Отдельный VPS, никаких ключей от кошельков/других ботов на нём
+- [ ] Отдельный VPS, никаких ключей кошельков/других ботов на нём
+- [ ] Вход только по SSH-ключу, root-вход запрещён, ufw включен
 - [ ] Telegram allowlist: только мой user ID
 - [ ] terminal.backend = docker
-- [ ] OmniRoute только на 127.0.0.1, наружу ничего кроме SSH
-- [ ] API-ключи DeepSeek/Gemini/OpenRouter — с лимитами расходов в кабинетах
+- [ ] OmniRoute только на 127.0.0.1, доступ — SSH-туннель
+- [ ] Баланс OpenRouter без автопополнения (top-up руками)
 - [ ] Никакого доступа Hermes к knowledge-base и iCloud
+
+## 10. Troubleshooting (типовые грабли новичка)
+
+| Симптом | Причина → фикс |
+|---|---|
+| `hermes: command not found` | `source ~/.bashrc`; или PATH без `~/.local/bin` |
+| Пустые/битые ответы в чате | провайдер/ключ → `hermes model` заново |
+| Бот в Telegram молчит | `hermes gateway status`; `journalctl -u hermes -f`; allowlist? |
+| После перезагрузки VPS всё умерло | `systemctl enable hermes` забыт |
+| SSH-туннель «connection refused» | omniroute не запущен на VPS: `systemctl status omniroute` |
+| Всё сломалось, непонятно где | по порядку: `hermes doctor` → `hermes model` → `hermes sessions list` → `hermes gateway status` |
+
+Доки: https://hermes-agent.nousresearch.com/docs/ · видео-мастеркласс есть на странице Quickstart.
 
 ---
 
 ## Лог (append-only)
 
-- 2026-07-17 — Проект создан (перенос из ideas/инструменты). Решения: новый VPS (изоляция секретов), без Claude Pro (стек DeepSeek+Gemini+OpenRouter), business research вычеркнут, задачи по одной начиная со скана вакансий. Написана инструкция.
+- 2026-07-17 — Проект создан (перенос из ideas/инструменты). Решения: новый VPS (изоляция секретов), без Claude Pro, business research вычеркнут, задачи по одной со скана вакансий.
+- 2026-07-17 — Инструкция переписана детально для первого раза. Архитектурное изменение: этап А — без OmniRoute (меньше движущихся частей); OmniRoute перенесён в фазу 5. Добавлено: SSH-ключи с Mac, пошаговый Hetzner, харднинг, systemd, SSH-туннель для дашборда, troubleshooting.
+- 2026-07-17 — Решение: DeepSeek идёт через OpenRouter (один аккаунт), а не через прямой DeepSeek API. Условие: зафиксировать официального провайдера DeepSeek в настройках OpenRouter (анти-квантизация).
