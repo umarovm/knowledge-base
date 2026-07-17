@@ -48,6 +48,8 @@ _Руками не редактировать. Закрывать задачи `
 
 ## Живые срезы (плагин Obsidian Tasks)
 
+### Горит: ближайшие 2 недели
+
 ```tasks
 not done
 due on or before in two weeks
@@ -55,4 +57,22 @@ sort by due
 path does not include TODO
 ```
 
-_Сгенерировано scripts/rebuild_indexes.py: 2026-07-17. Задач открыто: 34._
+### Все с дедлайном
+
+```tasks
+not done
+has due date
+group by due
+path does not include TODO
+```
+
+### Без даты
+
+```tasks
+not done
+no due date
+group by path
+path does not include TODO
+```
+
+_Сгенерировано scripts/rebuild_indexes.py: 2026-07-18. Задач открыто: 34._
