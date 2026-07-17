@@ -1,10 +1,10 @@
 ---
 date: 2026-07-16
-project: ideas/инструменты
-tags: [инструменты]
+project: projects/hermes
+tags: [bot, инструменты]
 status: processed
 related:
-  - "[[ideas/инструменты/2026-07-16-hermes-agent]]"
+  - "[[projects/hermes/2026-07-16-hermes-agent]]"
 summary: "OmniRoute — verified: self-hosted AI-gateway (16k★, MIT), Subscription→API→Cheap→Free fallback. Прерадовое условие для дешёвого Hermes agent, не самостоятельная задача сама по себе."
 ---
 
@@ -20,6 +20,6 @@ https://github.com/diegosouzapw/OmniRoute
 
 ## Статус и назначение
 
-Счёт за API сейчас не поджимает — ценность не в текущей экономии, а в том, что это условие для запуска Hermes agent почти бесплатно (см. [[ideas/инструменты/2026-07-16-hermes-agent]]). Без реального проекта с объёмным потреблением токенов сам по себе OmniRoute не нужен.
+Счёт за API сейчас не поджимает — ценность не в текущей экономии, а в том, что это условие для запуска Hermes agent почти бесплатно (см. [[projects/hermes/2026-07-16-hermes-agent]]). Без реального проекта с объёмным потреблением токенов сам по себе OmniRoute не нужен.
 
 Следующий шаг: поднять на VPS перед настройкой Hermes.
