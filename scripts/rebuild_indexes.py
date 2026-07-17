@@ -240,8 +240,8 @@ def gen_todo(tasks):
     if undated:
         lines += ["## Без даты", ""] + [item(t) for t in undated] + [""]
     lines += ["## Живые срезы (плагин Obsidian Tasks)", "",
-              "```tasks", "not done", "due before in two weeks",
-              "path does not include TODO", "```", "",
+              "```tasks", "not done", "due on or before in two weeks",
+              "sort by due", "path does not include TODO", "```", "",
               f"_Сгенерировано scripts/rebuild_indexes.py: {TODAY}. Задач открыто: {len(tasks)}._", ""]
     open(os.path.join(ROOT, "TODO.md"), "w", encoding="utf-8").write("\n".join(lines))
     return len(tasks), len(overdue)
