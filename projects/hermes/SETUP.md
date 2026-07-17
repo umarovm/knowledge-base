@@ -293,13 +293,13 @@ model:
 
 ## 9. Безопасность (чеклист)
 
-- [ ] Отдельный VPS, никаких ключей кошельков/других ботов на нём
-- [ ] Вход только по SSH-ключу, root-вход запрещён, ufw включен
-- [ ] Telegram allowlist: только мой user ID
-- [ ] terminal.backend = docker
-- [ ] OmniRoute только на 127.0.0.1, доступ — SSH-туннель
-- [ ] Баланс OpenRouter без автопополнения (top-up руками)
-- [ ] Никакого доступа Hermes к knowledge-base и iCloud
+- ☐ Отдельный VPS, никаких ключей кошельков/других ботов на нём
+- ☐ Вход только по SSH-ключу, root-вход запрещён, ufw включен
+- ☐ Telegram allowlist: только мой user ID
+- ☐ terminal.backend = docker
+- ☐ OmniRoute только на 127.0.0.1, доступ — SSH-туннель
+- ☐ Баланс OpenRouter без автопополнения (top-up руками)
+- ☐ Никакого доступа Hermes к knowledge-base и iCloud
 
 ## 10. Troubleshooting (типовые грабли новичка)
 

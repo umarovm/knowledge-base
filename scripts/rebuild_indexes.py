@@ -18,6 +18,8 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 PROJECT_DIRS = ["work", "job-search", "finance", "health", "learning", "ideas", "projects"]
 NOTE_RE = re.compile(r"^\d{4}-\d{2}-\d{2}-.+\.md$")
 TODAY = datetime.date.today().isoformat()
+TASK_RE = re.compile(r"^\s*- \[ \] (.+)$")
+DUE_RE = re.compile(r"📅\s*(\d{4}-\d{2}-\d{2})")
 
 
 def parse_frontmatter(path):
@@ -195,6 +197,56 @@ def gen_root_index(counts, registry):
     open(index_path, "w", encoding="utf-8").write("\n".join(lines))
 
 
+def collect_tasks(registry):
+    """Открытые задачи `- [ ] …` из PLAN.md и living-файлов (кроме archived)."""
+    sources = ["PLAN"]
+    sources += sorted(r for r, fm in registry.items()
+                      if fm.get("type") == "living" and fm.get("status") != "archived")
+    tasks = []  # (text, due|None, weekly, source_rel)
+    for rel in sources:
+        path = os.path.join(ROOT, rel + ".md")
+        if not os.path.exists(path):
+            continue
+        for line in open(path, encoding="utf-8"):
+            m = TASK_RE.match(line)
+            if not m:
+                continue
+            text = m.group(1).strip()
+            due = DUE_RE.search(text)
+            tasks.append((text, due.group(1) if due else None, "🔁" in text, rel))
+    return tasks
+
+
+def gen_todo(tasks):
+    """Корневой TODO.md — производная сводка, руками не редактировать."""
+    def item(t):
+        text, _, _, rel = t
+        return f"- {text} · [[{rel}]]"
+
+    overdue = sorted((t for t in tasks if not t[2] and t[1] and t[1] < TODAY), key=lambda t: t[1])
+    dated = sorted((t for t in tasks if not t[2] and t[1] and t[1] >= TODAY), key=lambda t: t[1])
+    weekly = [t for t in tasks if t[2]]
+    undated = [t for t in tasks if not t[1] and not t[2]]
+
+    lines = ["# TODO — сводка открытых задач", "",
+             "_Генерируется scripts/rebuild_indexes.py из `- [ ]` в PLAN.md и living-файлах._",
+             "_Руками не редактировать. Закрывать задачи `[x]` в файле-хозяине (ссылка у каждой), затем перегенерировать._", ""]
+    if overdue:
+        lines += ["## 🔥 Просрочено", ""] + [item(t) for t in overdue] + [""]
+    if dated:
+        lines += ["## По дедлайнам", ""] + [item(t) for t in dated] + [""]
+    if weekly:
+        lines += ["## Еженедельный ритм", ""] + [item(t) for t in weekly] + [""]
+    if undated:
+        lines += ["## Без даты", ""] + [item(t) for t in undated] + [""]
+    lines += ["## Живые срезы (плагин Obsidian Tasks)", "",
+              "```tasks", "not done", "due before in two weeks",
+              "path does not include TODO", "```", "",
+              f"_Сгенерировано scripts/rebuild_indexes.py: {TODAY}. Задач открыто: {len(tasks)}._", ""]
+    open(os.path.join(ROOT, "TODO.md"), "w", encoding="utf-8").write("\n".join(lines))
+    return len(tasks), len(overdue)
+
+
 def main():
     registry = collect()
     # битые related-ссылки
@@ -211,7 +263,9 @@ def main():
             dirs[:] = [x for x in dirs if not x.startswith(".")]
             counts[cur] = gen_dir_index(cur, registry)
     gen_root_index(counts, registry)
-    print(f"OK: {len(counts)} индексов перегенерировано, {len(registry)} файлов в реестре")
+    n_tasks, n_overdue = gen_todo(collect_tasks(registry))
+    print(f"OK: {len(counts)} индексов перегенерировано, {len(registry)} файлов в реестре, "
+          f"TODO.md: {n_tasks} задач ({n_overdue} просрочено)")
 
 
 if __name__ == "__main__":
