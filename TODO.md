@@ -50,7 +50,8 @@ _Руками не редактировать. Закрывать задачи `
 
 ```tasks
 not done
-due before in two weeks
+due on or before in two weeks
+sort by due
 path does not include TODO
 ```
 
