@@ -143,6 +143,22 @@ def main():
     for d in ORDER:
         digest_project(d, since)
 
+    stale_cutoff = (datetime.date.today() - datetime.timedelta(days=30)).isoformat()
+    stale = []
+    for cur, dirs, files in os.walk(os.path.join(ROOT, "ideas")):
+        dirs[:] = [x for x in dirs if not x.startswith(".")]
+        for f in sorted(files):
+            if not NOTE_RE.match(f):
+                continue
+            path = os.path.join(cur, f)
+            fm = parse_frontmatter(read(path))
+            if fm.get("status") != "archived" and note_date(f, fm) < stale_cutoff:
+                stale.append((os.path.relpath(path, ROOT)[:-3], fm.get("summary", "—")))
+    if stale:
+        print(f"\n## Идеи без движения 30+ дней ({len(stale)}) — архив или действие\n")
+        for rel, summary in stale:
+            print(f"- [[{rel}]] — {summary}")
+
     idx = read(os.path.join(ROOT, "index.md"))
     m = re.search(r"## Заметки для еженедельного обзора\n(.*?)(?=\n## |\n_|\Z)", idx, re.S)
     items = [ln for ln in (m.group(1).splitlines() if m else []) if ln.strip().startswith("-")]
