@@ -2,6 +2,7 @@
 
 | Файл | Дата | Summary | Статус | Теги |
 |---|---|---|---|---|
+| 2026-07-18-aionui-gui-для-cli-агентов.md | 2026-07-18 | AionUi — open source кроссплатформенный GUI для CLI ИИ-агентов (Claude Code, Codex и др.)… | processed | инструменты |
 | 2026-07-16-ppt-creator-и-дизайн-тулы.md | 2026-07-16 | Skill для презентаций + open source Figma (Penpot) + skill поиска клиентов — пригодится д… | processed | инструменты |
 | 2026-07-16-captcha-solver.md | 2026-07-16 | Репозиторий captcha solver — может пригодиться для ботов, автоматизирующих crypto-задачи. | processed | инструменты, bot |
 | 2026-07-16-anthropic-prompt-library.md | 2026-07-16 | Библиотека промптов Anthropic — проверить и сохранить полезные. | processed | инструменты |

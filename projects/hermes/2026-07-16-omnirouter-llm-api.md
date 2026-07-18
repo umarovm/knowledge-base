@@ -5,7 +5,7 @@ tags: [bot, инструменты]
 status: processed
 related:
   - "[[projects/hermes/2026-07-16-hermes-agent]]"
-summary: "OmniRoute — verified: self-hosted AI-gateway (16k★, MIT), Subscription→API→Cheap→Free fallback. Прерадовое условие для дешёвого Hermes agent, не самостоятельная задача сама по себе."
+summary: "OmniRoute — verified: self-hosted AI-gateway (16k★, MIT), Subscription→API→Cheap→Free fallback. Предварительное условие для дешёвого Hermes agent, не самостоятельная задача сама по себе."
 ---
 
 # Open router / OmniRoute — проверено (16.07.2026)

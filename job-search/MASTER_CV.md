@@ -7,7 +7,7 @@ GitHub: https://github.com/umarovm
 
 ## PROFESSIONAL SUMMARY
 
-Senior Technical Operations, Incident Management and Product Operations professional with 3+ years of experience in a large-scale, regulated fintech environment (Revolut). Proven expertise in company-wide incident command, real-time monitoring, product bug governance, escalation quality control, and shift leadership in high-load environments.
+Senior Technical Operations, Incident Management and Product Operations professional with 3.5+ years of experience in a large-scale, regulated fintech environment (Revolut). Proven expertise in company-wide incident command, real-time monitoring, product bug governance, escalation quality control, and shift leadership in high-load environments.
 
 Trusted to operate as a single on-call Incident Watchman Manager, including night shifts with full ownership of alerts, tickets, and outages across the entire company. Extensive experience handling P0–P2 user-facing and infrastructure incidents impacting payments, authentication, core product features, regulatory compliance, and financial risk.
 
