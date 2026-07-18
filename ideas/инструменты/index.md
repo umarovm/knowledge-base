@@ -14,4 +14,4 @@
 
 - [[ideas/инструменты/2026-07-16-ppt-creator-и-дизайн-тулы]] ↔ [[job-search/MASTER_CV]] — —
 
-_Сгенерировано scripts/rebuild_indexes.py: 2026-07-18. Руками не редактировать._
+_Сгенерировано scripts/rebuild_indexes.py: 2026-07-19. Руками не редактировать._

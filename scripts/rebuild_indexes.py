@@ -16,6 +16,7 @@ import datetime
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 PROJECT_DIRS = ["work", "job-search", "finance", "health", "learning", "ideas", "projects"]
+THEME_TAGS = ["uzbekistan"]  # сквозные теги: для каждого генерируется themes/<тег>.md
 NOTE_RE = re.compile(r"^\d{4}-\d{2}-\d{2}-.+\.md$")
 TODAY = datetime.date.today().isoformat()
 TASK_RE = re.compile(r"^\s*- \[ \] (.+)$")
@@ -197,6 +198,37 @@ def gen_root_index(counts, registry):
     open(index_path, "w", encoding="utf-8").write("\n".join(lines))
 
 
+def gen_themes(registry):
+    """themes/<тег>.md — все заметки со сквозным тегом, сгруппированные по папкам."""
+    made = 0
+    for tag in THEME_TAGS:
+        hits = []
+        for r, fm in sorted(registry.items()):
+            tags = fm.get("tags") or []
+            if tag in (tags if isinstance(tags, list) else [tags]):
+                hits.append((r, fm))
+        if not hits:
+            continue
+        os.makedirs(os.path.join(ROOT, "themes"), exist_ok=True)
+        lines = [f"# Тема: {tag}", "",
+                 f"Все заметки с тегом `{tag}` по всем папкам ({len(hits)} шт.).", ""]
+        by_dir = {}
+        for r, fm in hits:
+            by_dir.setdefault(r.split(os.sep)[0], []).append((r, fm))
+        for d in PROJECT_DIRS:
+            if d not in by_dir:
+                continue
+            lines += [f"## {d}", ""]
+            for r, fm in sorted(by_dir[d], key=lambda x: x[1].get("date", ""), reverse=True):
+                status = "living" if fm.get("type") == "living" else fm.get("status", "—")
+                lines.append(f"- [[{r}]] ({fm.get('date', '—')}, {status}) — {trunc(fm.get('summary'), 100)}")
+            lines.append("")
+        lines += [f"_Сгенерировано scripts/rebuild_indexes.py: {TODAY}. Руками не редактировать._", ""]
+        open(os.path.join(ROOT, "themes", f"{tag}.md"), "w", encoding="utf-8").write("\n".join(lines))
+        made += 1
+    return made
+
+
 def collect_tasks(registry):
     """Открытые задачи `- [ ] …` из PLAN.md и living-файлов (кроме archived)."""
     sources = ["PLAN"]
@@ -270,9 +302,10 @@ def main():
             dirs[:] = [x for x in dirs if not x.startswith(".")]
             counts[cur] = gen_dir_index(cur, registry)
     gen_root_index(counts, registry)
+    n_themes = gen_themes(registry)
     n_tasks, n_overdue = gen_todo(collect_tasks(registry))
     print(f"OK: {len(counts)} индексов перегенерировано, {len(registry)} файлов в реестре, "
-          f"TODO.md: {n_tasks} задач ({n_overdue} просрочено)")
+          f"{n_themes} тем в themes/, TODO.md: {n_tasks} задач ({n_overdue} просрочено)")
 
 
 if __name__ == "__main__":

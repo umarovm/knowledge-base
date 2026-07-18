@@ -119,16 +119,25 @@ def main():
                     if t and t not in tags_known:
                         report(path, f"тег '{t}' вне словаря CLAUDE.md")
 
-        # 5. Задачи в таблицах
+        # 5. Living: шапка устарела относительно лога.
+        # Работает только для файлов с датированным заголовком шапки,
+        # например "## Снапшот (2026-07-15)" или "## Статус (2026-07-15)".
+        if fm and fm.get("type") == "living" and fm.get("status") != "archived":
+            head = re.search(r"^## .+\((\d{4}-\d{2}-\d{2})\)", text, re.M)
+            log_dates = re.findall(r"^\|\s*(\d{4}-\d{2}-\d{2})\s*\|", text, re.M)
+            if head and log_dates and max(log_dates) > head.group(1):
+                report(path, f"шапка от {head.group(1)}, а лог свежее ({max(log_dates)}) — обновить шапку")
+
+        # 6. Задачи в таблицах
         for i, line in enumerate(text.splitlines(), 1):
             if line.lstrip().startswith("|") and "- [ ]" in line:
                 report(path, f"строка {i}: задача внутри таблицы — скрипт и плагин её не увидят")
 
-        # 6. Чекбоксы в archived-файлах
+        # 7. Чекбоксы в archived-файлах
         if fm and fm.get("status") == "archived" and re.search(r"^\s*- \[ \] ", text, re.M):
             report(path, "archived, но содержит '- [ ]' — заменить на '- ☐' или закрыть")
 
-    # 7. Залежавшийся inbox
+    # 8. Залежавшийся inbox
     inbox = os.path.join(ROOT, "inbox")
     if os.path.isdir(inbox):
         for f in sorted(os.listdir(inbox)):
