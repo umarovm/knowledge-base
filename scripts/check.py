@@ -62,7 +62,8 @@ def parse_frontmatter(text):
 
 
 def tag_dictionary():
-    m = re.search(r"## Словарь тегов\n(.*?)(?=\n## )", read(os.path.join(ROOT, "CLAUDE.md")), re.S)
+    text = read(os.path.join(ROOT, "inbox", "CLAUDE.md"))
+    m = re.search(r"## Словарь тегов\n(.*?)(?=\n## |\Z)", text, re.S)
     tags = set()
     for group in re.findall(r"`([^`]+)`", m.group(1) if m else ""):
         tags.update(t.strip() for t in group.split(","))
@@ -127,6 +128,8 @@ def main():
             log_dates = re.findall(r"^\|\s*(\d{4}-\d{2}-\d{2})\s*\|", text, re.M)
             if head and log_dates and max(log_dates) > head.group(1):
                 report(path, f"шапка от {head.group(1)}, а лог свежее ({max(log_dates)}) — обновить шапку")
+            if len(log_dates) > 30:
+                report(path, f"лог {len(log_dates)} строк — ротировать старейшие в _ARCHIVE (правило в CLAUDE.md)")
 
         # 6. Задачи в таблицах
         for i, line in enumerate(text.splitlines(), 1):
