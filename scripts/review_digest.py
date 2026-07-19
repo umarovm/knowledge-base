@@ -6,9 +6,10 @@
 (просроченные помечены), related-связи новых заметок. Плюс: inbox, секция
 «Заметки для еженедельного обзора», задачи PLAN.md.
 
-Запуск: python3 scripts/review_digest.py [--since YYYY-MM-DD]
-Дата по умолчанию — «Последний разбор:» из шапки WEEKLY_REVIEW.md;
-если разборов не было — последние 14 дней. Только стандартная библиотека.
+Роль: быстрый срез между глубокими разборами проектов (см. WEEKLY_REVIEW.md),
+тела заметок не читает. Запуск: python3 scripts/review_digest.py [--since YYYY-MM-DD]
+Дата по умолчанию — самая старая дата из таблицы «Последние разборы»
+WEEKLY_REVIEW.md; если разборов не было — 14 дней. Только стандартная библиотека.
 """
 import datetime
 import os
@@ -61,9 +62,10 @@ def last_review_date():
         if a == "--since" and DATE_RE.fullmatch(b):
             return b
     text = read(os.path.join(ROOT, "WEEKLY_REVIEW.md"))
-    m = re.search(r"Последний разбор:\s*(\d{4}-\d{2}-\d{2})", text)
-    if m:
-        return m.group(1)
+    m = re.search(r"## Последние разборы\n(.*?)\n## ", text, re.S)
+    dates = re.findall(r"\|\s*(\d{4}-\d{2}-\d{2})\s*\|", m.group(1)) if m else []
+    if dates:
+        return min(dates)
     return (datetime.date.today() - datetime.timedelta(days=14)).isoformat()
 
 
