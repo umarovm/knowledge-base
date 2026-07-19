@@ -75,5 +75,5 @@ frontmatter; `archived` — неактуально, хранится для ис
 `bot, wikibot, deploy, hermes, automation, freelance` (projects) ·
 `экономика, конспект, курсы` (learning) ·
 `инструменты, продуктивность, доход, бизнес-идея, telegram-бот, ai-agent, saas` (ideas) ·
-`cashcat, arcus` (finance) · `uzbekistan` (сквозной).
+`cashcat, arcus, расходы` (finance) · `uzbekistan` (сквозной).
 Новый тег — добавь сюда же.
