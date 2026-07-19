@@ -3,6 +3,8 @@ date: 2026-07-16
 project: ideas/инструменты
 tags: [инструменты]
 status: processed
+related:
+  - "[[ideas/BACKLOG]]"
 summary: "Репозиторий готовых skills/agents для Claude Code — оценить, реально ли повышает качество или просто жжёт токены."
 ---
 

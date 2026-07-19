@@ -2,6 +2,7 @@
 
 Личная база знаний. Заметки приходят голосом через Telegram-бот (LLMWikiBot) в `inbox/`,
 затем разбираются по проектным папкам.
+Прежде чем как либо менять именно этот файл, получи моё четкое подтверждение. 
 
 ## Обо мне (дайджест)
 
@@ -87,7 +88,7 @@
 
 Текущие: finance/PORTFOLIO.md · work/PROMOTION.md · job-search/APPLICATIONS.md ·
 job-search/STORY_BANK.md · job-search/INTERVIEW_DRILLS.md · learning/SKILLS_LOG.md ·
-projects/wikibot/BACKLOG.md · projects/трейдинг-боты/BACKLOG.md.
+projects/wikibot/BACKLOG.md · projects/трейдинг-боты/BACKLOG.md · ideas/BACKLOG.md.
 
 ## Задачи (to-do)
 

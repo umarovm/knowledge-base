@@ -3,6 +3,8 @@ date: 2026-07-16
 project: ideas/инструменты
 tags: [инструменты]
 status: processed
+related:
+  - "[[ideas/BACKLOG]]"
 summary: "Репозиторий для конвертации YouTube-видео в markdown для разбора с LLM — сравнить с NotebookLM."
 ---
 

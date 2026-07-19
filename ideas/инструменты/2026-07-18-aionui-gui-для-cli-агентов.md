@@ -3,6 +3,8 @@ date: 2026-07-18
 project: ideas/инструменты
 tags: [инструменты]
 status: processed
+related:
+  - "[[ideas/BACKLOG]]"
 summary: "AionUi — open source кроссплатформенный GUI для CLI ИИ-агентов (Claude Code, Codex и др.), Team Mode, встроенные Office-утилиты; проверить и решить, нужен ли для продуктивности."
 ---
 
