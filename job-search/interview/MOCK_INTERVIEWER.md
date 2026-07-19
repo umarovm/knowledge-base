@@ -1,3 +1,9 @@
+---
+type: living
+project: job-search/interview
+summary: "Промпт mock-интервьюера (roleplay OM-кейсов по рубрике INTERVIEW_DRILLS.md) + лог тренировочных сессий: дата, кейс, счёт, главный фейл."
+---
+
 # MOCK_INTERVIEWER — промпт для problem-solving mock-интервью
 
 Инструкция для AI-агента (Claude), когда Мухаммад просит провести mock problem-solving интервью. Основано на разборе провального OM-интервью (INTERVIEW_DRILLS.md — прочитать перед сессией: там паттерны провала P1–P5, эталонное закрытие и банк кейсов).

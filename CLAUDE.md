@@ -87,7 +87,8 @@
   формата со `status: archived` (скрипты и Claude его не читают). `check.py` напомнит.
 
 Текущие: finance/PORTFOLIO.md · work/PROMOTION.md · job-search/APPLICATIONS.md ·
-job-search/STORY_BANK.md · job-search/INTERVIEW_DRILLS.md · learning/SKILLS_LOG.md ·
+job-search/STORY_BANK.md · job-search/interview/INTERVIEW_DRILLS.md ·
+job-search/interview/MOCK_INTERVIEWER.md · learning/SKILLS_LOG.md ·
 projects/wikibot/BACKLOG.md · projects/трейдинг-боты/BACKLOG.md · ideas/BACKLOG.md.
 
 ## Задачи (to-do)

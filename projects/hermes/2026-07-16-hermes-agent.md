@@ -5,7 +5,7 @@ tags: [bot, инструменты]
 status: processed
 related:
   - "[[projects/hermes/2026-07-16-omnirouter-llm-api]]"
-  - "[[job-search/2026-07-16-автоматизация-поиска-работы]]"
+  - "[[job-search/remote-test/2026-07-16-автоматизация-поиска-работы]]"
 summary: "Hermes agent на VPS через OmniRoute (verified): руки для внешних задач (скан вакансий, тайм-практика OM-кейсов, трекинг фриланс-воронки/networking). Без доступа к knowledge-base — это остаётся отдельным контуром (second brain)."
 ---
 

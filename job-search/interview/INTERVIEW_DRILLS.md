@@ -1,7 +1,7 @@
 ---
 type: living
-project: job-search
-summary: "Тренажёр по разбору OM-интервью: диагноз, дриллы A–E, банк mock-кейсов, рубрика, лог тренировок."
+project: job-search/interview
+summary: "Тренажёр по разбору OM-интервью: диагноз, дриллы A–E, банк mock-кейсов, рубрика оценки (лог тренировок — в MOCK_INTERVIEWER.md)."
 ---
 
 # INTERVIEW_DRILLS — тренажёр по разбору OM-интервью (Revolut, ~1 июля 2026)

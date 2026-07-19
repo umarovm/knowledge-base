@@ -2,6 +2,8 @@
 
 Адаптация MASTER_CV под подачу (июль 2026). MASTER_CV не изменён. Логика: AI-нарратив как дифференциатор, непрямое лидерство как ответ на «managing direct and indirect reports», квантифицированные аудиты как «advanced analysis / process improvements».
 
+**Статус:** подача (POM Support/Fincrime Core) отклонена 14.07.2026 (см. job-search/APPLICATIONS.md). Файл сохранён как шаблон AI Ops-нарратива для будущих внешних подач по плану раннего remote-теста (job-search/remote-test/2026-07-15-план-раннего-remote-теста.md).
+
 ---
 
 # MUKHAMMAD UMAROV

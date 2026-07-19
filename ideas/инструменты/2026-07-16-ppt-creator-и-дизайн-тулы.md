@@ -4,7 +4,7 @@ project: ideas/инструменты
 tags: [инструменты]
 status: processed
 related:
-  - "[[job-search/MASTER_CV]]"
+  - "[[job-search/cv/MASTER_CV]]"
   - "[[ideas/BACKLOG]]"
 summary: "Skill для презентаций + open source Figma (Penpot) + skill поиска клиентов — пригодится для презентации личных проектов и работы в Revolut работодателям/инвесторам."
 ---
