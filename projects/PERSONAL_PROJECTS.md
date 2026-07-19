@@ -21,7 +21,7 @@ Resume bullet: *Designed and deployed a production FastAPI trading system ingest
 
 GitHub: https://github.com/umarovm/automated_xstocks (публичный)
 
-Node.js/TypeScript-бэкенд, торгует токенизированными акциями (xStocks) на Solana через Jupiter Swap API v2. В проде <1 месяца, на реальном капитале, сделок пока не было (ждёт сигналов).
+Node.js/TypeScript-бэкенд, торгует токенизированными акциями (xStocks) на Solana через Jupiter Swap API v2. В проде <1 месяца, на реальном капитале — уже торгует и зарабатывает; основное ограничение — прайс-импакт из-за низкой ликвидности (Meta ~1.37%).
 
 - Fastify webhook-сервер, поддержка нескольких кошельков ("аккаунтов"), диспетчер маршрутизирует каждый алерт на один свободный аккаунт (не broadcast)
 - Стейт-машина на позицию: IDLE → OPEN(TICKER) через BUY, докупка через DIP (до 3 раз), полный выход через SELL; состояние меняется только после подтверждения свопа on-chain
