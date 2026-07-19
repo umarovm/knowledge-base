@@ -23,6 +23,22 @@ _Шапка = текущая картина (перезаписывается). 
 | Humans | телеком/финтех | — |
 | Anorbank | цифровой банк | — |
 
+## Нетворк-CRM (мост)
+
+_Хозяин статусов контактов — CRM в vault work-journal: `LinkedIn/Connections/` (файл на человека + Bases-таблица, файлы компаний в `LinkedIn/Companies/`). Здесь — только производный снимок. Правило моста: содержательная переписка/звонок → заметка `job-search/YYYY-MM-DD-нетворк-…` + датапоинт в «Вилки»; в CRM остаётся только статус._
+
+**Снимок 2026-07-19, 27 чел.:** connected 16 · contacted 1 (Muhammadjon, TBC) · pending 3 · denied 3 · без статуса 4. По компаниям: Click 10 · TBC 9 · Uzum 6 · Payme 1 · Yandex 1.
+
+**Очередь на контакт** (connected, не contacted; приоритет — под сбор вилок ops/quality):
+
+1. Baxrom Sobirjonov — Head of Customer Technical Support, Uzum — прямое попадание в целевую Head-роль.
+2. Elina Usmanova — Head of Recruitment, Click — рекрутеры знают вилки точнее всех.
+3. Karina Rasulova — IT Recruiter, TBC — то же, по TBC.
+4. Mikhail Kivi — Head of Data Science, Click — Head-уровень, смежная функция.
+5. Alan Tedeshvili — Head of Credit, Uzum — Head-уровень, картина грейдов Uzum.
+
+Заметка: Alexey Yashin (Head of Product Operations, Uzum) — denied; самый релевантный по роли человек. Кандидат на повторный заход через интро, когда появится общий контакт в Uzum.
+
 ## Вилки (подтверждённые датапоинты)
 
 | Дата | Роль / уровень | Вилка | Источник |
@@ -40,3 +56,4 @@ _Пока пусто — заполняется мониторингом._
 ## Лог
 
 - 2026-07-19 — файл создан; перенесены датапоинты из нетворк-заметки TBC + первый hh.uz-снипет; настроен еженедельный мониторинг (сб 10:00).
+- 2026-07-19 — подключён мост к нетворк-CRM (work-journal/LinkedIn): снимок 27 контактов, очередь топ-5 на контакт под вилки ops/quality.
