@@ -1,10 +1,11 @@
 # Тема: uzbekistan
 
-Все заметки с тегом `uzbekistan` по всем папкам (14 шт.).
+Все заметки с тегом `uzbekistan` по всем папкам (15 шт.).
 
 ## job-search
 
 - [[job-search/2026-07-19-нетворк-tbc-product-owner-muhammadjon]] (2026-07-19, processed) — Первый содержательный UZ-контакт (LinkedIn-переписка с Muhammadjon Matchanov, PO в TBC Bank): вилки…
+- [[job-search/UZ_MARKET]] (—, living) — Карта узбекского рынка: целевые компании, релевантные вакансии (ops/incident/quality/support lead),…
 
 ## finance
 
