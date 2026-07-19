@@ -4,7 +4,6 @@
 |---|---|---|---|---|
 | PROMOTION.md | — | TL-трек и promotion: статус реквизишна, локи, KPI-рычаги. Заменяет legacy CSV-трекер. | living | — |
 | 2026-07-15-реквизишн-тимлид-и-ночные-смены.md | 2026-07-15 | Реквизишн на тимлида откроется через пару дней, план подать CV; вариант ночных смен с авг… | processed | promotion, team-lead, salary |
-| Promotion Tracker - Legacy.csv | 2026-07-14 | Легаси-трекер промоушена (заменён PROMOTION.md) | archived | promotion |
 | REVOLUT_PROJECTS.md | 2026-07-14 | Проекты и достижения в Revolut | processed | revolut, achievements |
 
 ## Связи
