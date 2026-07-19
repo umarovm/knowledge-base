@@ -70,7 +70,7 @@ frontmatter; `archived` — неактуально, хранится для ис
 
 ## Словарь тегов
 
-`promotion, team-lead, salary, revolut` (work) · `cv, interview, remote, applications` (job-search) ·
+`promotion, team-lead, salary, revolut` (work) · `cv, interview, remote, applications, networking` (job-search) ·
 `investing, crypto, portfolio, deposit, strategy, dca, ibkr, x-stocks` (finance) ·
 `bot, wikibot, deploy, hermes, automation, freelance` (projects) ·
 `экономика, конспект, курсы` (learning) ·
