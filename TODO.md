@@ -40,7 +40,6 @@ _Руками не редактировать. Закрывать задачи `
 
 - 1 содержательный UZ-нетворк-звонок (цель к январю: 20–25 контактов) 🔁 every week 📅 2026-07-19 · [[PLAN]]
 - Недельный чек по 7 показателям 🔁 every week 📅 2026-07-19 · [[PLAN]]
-- Mock-сессия / полный OM-кейс с таймером (дриллы A–C; база 4–5/20, цель ≥16/20) 🔁 every week 📅 2026-07-19 · [[job-search/interview/INTERVIEW_DRILLS]]
 - SQL руками 2–3 ч (DataLemur/StrataScratch; joins, GROUP BY, CTE, window functions; ориентир 40–60 задач) 🔁 every week 📅 2026-07-19 · [[learning/SKILLS_LOG]]
 
 ## Без даты
@@ -90,4 +89,4 @@ group by path
 path does not include TODO
 ```
 
-_Сгенерировано scripts/rebuild_indexes.py: 2026-07-19. Задач открыто: 49._
+_Сгенерировано scripts/rebuild_indexes.py: 2026-07-19. Задач открыто: 48._
