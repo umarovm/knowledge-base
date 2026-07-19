@@ -5,6 +5,8 @@ capture_id: "tg-135983407-43"
 project: ideas
 tags: [bot, crypto]
 status: processed
+related:
+  - "[[ideas/BACKLOG]]"
 summary: "Идея-хобби: свой продукт в крипте на Base или Abstract, с использованием готовых API вроде Relay или Jupiter — пока без конкретики."
 ---
 
