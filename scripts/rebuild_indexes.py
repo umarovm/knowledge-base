@@ -192,7 +192,8 @@ def gen_root_index(counts, registry):
         lines.append(f"| {d} | {first_desc(os.path.join(base, 'CLAUDE.md'))} | {len(in_dir)} | {last or '—'} |")
     lines += ["", "## Контекст в корне", "",
               "- `ABOUT_ME.md` — полный контекст о пользователе (роль, цели, ценности)",
-              "- `PLAN.md` — стратегический план до переезда в Узбекистан (2027)", "",
+              "- `PLAN.md` — стратегический план до переезда в Узбекистан (2027)",
+              "- `LOG.md` — append-only журнал операций над базой (`tail -5 LOG.md`)", "",
               "## Заметки для еженедельного обзора", "", review, "",
               f"_Сгенерировано scripts/rebuild_indexes.py: {TODAY}. Таблица и связи — руками не редактировать; секция обзора — можно._", ""]
     open(index_path, "w", encoding="utf-8").write("\n".join(lines))
