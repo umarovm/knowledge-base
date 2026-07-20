@@ -6,4 +6,4 @@
 | MOCK_INTERVIEWER.md | — | Промпт mock-интервьюера (roleplay OM-кейсов по рубрике INTERVIEW_DRILLS.md) + лог трениро… | living | — |
 | ops_manager_interview_transcript.md | 2026-07-14 | Транскрипт интервью на Ops Manager | processed | interview |
 
-_Сгенерировано scripts/rebuild_indexes.py: 2026-07-19. Руками не редактировать._
+_Сгенерировано scripts/rebuild_indexes.py: 2026-07-20. Руками не редактировать._

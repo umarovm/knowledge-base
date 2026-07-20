@@ -11,4 +11,4 @@
 
 - [[job-search/cv/MASTER_CV]] ↔ [[ideas/инструменты/2026-07-16-ppt-creator-и-дизайн-тулы]] — Skill для презентаций + open source Figma (Penpot) + skill поиска клиентов — пр…
 
-_Сгенерировано scripts/rebuild_indexes.py: 2026-07-19. Руками не редактировать._
+_Сгенерировано scripts/rebuild_indexes.py: 2026-07-20. Руками не редактировать._

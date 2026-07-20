@@ -20,4 +20,4 @@
 - [[job-search/2026-07-19-нетворк-tbc-product-owner-muhammadjon]] ↔ [[PLAN]] — —
 - [[job-search/UZ_MARKET]] ↔ [[PLAN]] — —
 
-_Сгенерировано scripts/rebuild_indexes.py: 2026-07-19. Руками не редактировать._
+_Сгенерировано scripts/rebuild_indexes.py: 2026-07-20. Руками не редактировать._
