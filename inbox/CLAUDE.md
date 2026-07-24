@@ -85,7 +85,7 @@ frontmatter; `archived` — неактуально, хранится для ис
 
 `promotion, team-lead, salary, revolut` (work) · `cv, interview, remote, applications, networking` (job-search) ·
 `investing, crypto, portfolio, deposit, strategy, dca, ibkr, x-stocks` (finance) ·
-`bot, wikibot, deploy, hermes, automation, freelance` (projects) ·
+`bot, wikibot, deploy, automation, freelance` (projects) ·
 `экономика, конспект, курсы` (learning) ·
 `инструменты, продуктивность, доход, бизнес-идея, telegram-бот, ai-agent, saas` (ideas) ·
 `cashcat, arcus, расходы` (finance) · `uzbekistan` (сквозной).

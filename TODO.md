@@ -91,4 +91,4 @@ group by path
 path does not include TODO
 ```
 
-_Сгенерировано scripts/rebuild_indexes.py: 2026-07-21. Задач открыто: 47._
+_Сгенерировано scripts/rebuild_indexes.py: 2026-07-23. Задач открыто: 47._
